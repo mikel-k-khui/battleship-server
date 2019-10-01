@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/mikel-k-khui/battleship-server.git"
   },
-  "author": "",
+  "author": "Michael Chui and Russell McWhae",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mikel-k-khui/battleship-server/issues"
