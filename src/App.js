@@ -15,8 +15,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 //   console.log("In API server.");
 // });
 
-const socket = io.on('connect', function(socket) {
-  console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
+const socket = io.on('connect', (socket) => {
+  console.log((new Date().toISOString()) + ' ID ' + socket + ' connected from' + socket.io);
 
   // create user object for additional data
   apiState[socket.id] = {

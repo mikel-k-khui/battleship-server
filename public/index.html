@@ -38,9 +38,11 @@
       $('form').submit((event) => {
           event.preventDefault();
           const shot = document.querySelector( "#shot" ).value;
-          socket.emit('shotFeed', shot);
-          $('h3').text(`Shot fired ${shot}!`);
-          $('input').val('');
+          socket.emit('shotFeed', shot, (res) => {
+            console.log("After submit's emit:", res);
+            $('h3').text(`Shot fired ${shot}!`);
+            $('input').val('');
+          });
         });
     </script>
   </body>
