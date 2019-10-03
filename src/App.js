@@ -6,7 +6,7 @@ var io = require('socket.io')(server);
 
 const ENV = process.env.NODE_ENV || "development"; 
 const PORT = process.env.PORT || 8001;
-const apiState = {};
+const playerList = {};
 
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -15,31 +15,49 @@ app.use(express.static(path.join(__dirname, '../public')));
 //   console.log("In API server.");
 // });
 
-const socket = io.on('connect', (socket) => {
-  console.log((new Date().toISOString()) + ' ID ' + socket + ' connected from' + socket.io);
+io.on('connect', (socket) => {
+  console.log((new Date().toISOString()) + ' ID ' + socket.id);
 
-  // create user object for additional data
-  apiState[socket.id] = {
-    inGame: null,
-    player: null
-  };
+  socket.on('player', (socketID, fn) => {
+    //check socketID = socket.id
+    playerList[socket.id] = {
+      player_id: socket.id,
+      boards: null,
+      ships: null,
+      turn: null
+    };
+    console.log("Confirmed player from client in server");
 
-  socket.on('appFeed', (feed) => {
-    console.log("Received feed from client in server:", feed);
+    return initiateGame(socket.id);
+  });
+
+  socket.on('gameFeed', (data) => {
+    console.log("Received new gameState from client in server:", data);
+    //if right player's turn
+    //update the board
+    //ask for a move
+    //send shot with full game data
   });
 
   socket.on('shotFeed', (feed) => {
     sendShot(feed);
-    console.log("Received feed from client in server:", feed);
+    console.log("Received feed from test page in server:", feed);
   });
+
+
 
 }); // end of io.on wrapping all socket listeners
 
-  // Simulate sending a shot to the App
-function sendShot(target) {
-  socket.emit('serverFeed', target);
+function getShot(socketID) {
+
 };
 
+// Sending a shot to the client
+function sendShot(target) {
+  socket.emit('serverFeed', target, (req, res) => {
+    console.log("Does emit has a callback?", req, " and ", res);
+  });
+};
 
 server.listen(PORT, () => {
   console.log(`Listening on port ${PORT} in ${ENV} mode.`);

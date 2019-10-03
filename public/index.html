@@ -15,12 +15,19 @@
     <form>
       <h2>Enter a battle ship move (From A1 to F5)</h2>
       <input
-        className="battleship__test--emit"
-        id="shot"
-        name="Battle ship move"
+        className="battleship__row--emit"
+        id="shot_row"
+        name="Battle ship move row"
         type="text"
-        placeholder="F5"
+        placeholder="a-f"
       />
+      <input
+      className="battleship__col--emit"
+      id="shot_col"
+      name="Battle ship move col"
+      type="text"
+      placeholder="0-5"
+    />
       <button type="submit" class="send__shot">Shot</button>
       <h3></h3>
     </form>
@@ -37,11 +44,15 @@
 
       $('form').submit((event) => {
           event.preventDefault();
-          const shot = document.querySelector( "#shot" ).value;
-          socket.emit('shotFeed', shot, (res) => {
+
+          let data = {player: 'server'};
+          data['row'] = document.querySelector( "#shot_row" ).value;
+          data['col'] = document.querySelector( "#shot_col" ).value;
+          socket.emit('shotFeed', data, (res) => {
             console.log("After submit's emit:", res);
-            $('h3').text(`Shot fired ${shot}!`);
-            $('input').val('');
+            $('h3').text(`Shot fired ${data}!`);
+            $('.battleship__row--emit').val('');
+            $('.battleship__col--emit').val('');
           });
         });
     </script>
