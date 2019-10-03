@@ -13,7 +13,7 @@
   </head>
   <body>
     <form>
-      <h2>Enter a battle ship move (From A1 to F5)</h2>
+      <h2>Enter a battle ship move (From A0 to F5) with socket</h2>
       <input
         className="battleship__row--emit"
         id="shot_row"
@@ -36,21 +36,29 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io('http://localhost:8001');
+      var player_id = '';
 
       socket.on('connect', () => {
         console.log("Socket:", typeof socket, ", ", socket);
-        alert(`Connected to server with ${socket}`);
+        alert(`Connected to server with ${socket.id}`);
+        socket.emit('api', socket.id);
+      });
+
+      socket.on('api', (player) => {
+        player_id = player;
       });
 
       $('form').submit((event) => {
           event.preventDefault();
 
-          let data = {player: 'server'};
-          data['row'] = document.querySelector( "#shot_row" ).value;
-          data['col'] = document.querySelector( "#shot_col" ).value;
+          let gameState = {player: 'server'};
+          gameState['row'] = document.querySelector( "#shot_row" ).value;
+          gameState['col'] = document.querySelector( "#shot_col" ).value;
+          let data = gameState;
+          
           socket.emit('shotFeed', data, (res) => {
             console.log("After submit's emit:", res);
-            $('h3').text(`Shot fired ${data}!`);
+            $('h3').text(`Shot fired @${data.row},${data.col}!`);
             $('.battleship__row--emit').val('');
             $('.battleship__col--emit').val('');
           });

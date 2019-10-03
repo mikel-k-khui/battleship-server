@@ -4,7 +4,7 @@
   "description": "Phaser + React + Socket.io battleship",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/App.js",
+    "start": "./node_modules/.bin/nodemon --watch src -e js ./src/App.js",
     "test:server": "NODE_ENV=test npm start"
   },
   "repository": {
@@ -22,5 +22,8 @@
     "jquery": "^3.4.1",
     "path": "^0.12.7",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.3"
   }
 }
