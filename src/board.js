@@ -70,10 +70,10 @@ function initGameBoards(socketId) {
   };
 
   player = distributeShips(playerSpotsOccupied);
-  console.log(`initGameBoards of board.js - player${socketId}:\n`, playerCleanBoard, "\n", player['spotsOccupiedObj']);
+  // console.log(`initGameBoards of board.js - player${socketId}:\n`, playerCleanBoard, "\n", player['spotsOccupiedObj']);
  
   opponent = distributeShips(opponentSpotsOccupied);
-  console.log('initGameBoards of board.js - opponent:\n', opponentCleanBoard, "\n", opponent['spotsOccupiedObj']);
+  // console.log('initGameBoards of board.js - opponent:\n', opponentCleanBoard, "\n", opponent['spotsOccupiedObj']);
 
   return { gameState: { 
     'player_id': socketId,
@@ -99,6 +99,7 @@ function distributeShips(spotsOccupiedObj) {
         ],
       size: 2,
       sunk: false,
+      hit: false,
       horizontal: Math.random() >= 0.5 // true or false
     };
 

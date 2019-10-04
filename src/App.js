@@ -15,7 +15,7 @@ const playerList = {};
 // Game logics
 const { initGameBoards } = require('./board');
 const { getAShot, getShotsArray } = require('./shots');
-const { updateBoard } = require('./update');
+const { updateOpponent, updatePlayer } = require('./update');
 
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -30,6 +30,7 @@ const socket = io.on('connect', (socket) => {
   let gameState = {};
   let randomShots = {};
   let knownShots = {};
+  let level = 'EASY';
 
   /* Player socket listenrs and logic calls */
   socket.on('player', (socketId, cb) => {
@@ -51,8 +52,16 @@ const socket = io.on('connect', (socket) => {
 
   socket.on('gameFeed', (hit, cb) => {
     console.log("Received new gameState from client in server:", hit);
-    updateBoard(hit, gameState, knownShots, randomShots);
-    console.log(gameState);
+    updateOpponent(hit, gameState, knownShots, randomShots);
+
+    //determine shot by level
+    shotOnPlayer = getAShot(gameState);
+
+    updatePlayer(shotOnPlayer, gameState, knownShots, randomShots)
+
+
+    console.log(`Before call `, gameState.gameState.turn, "\nplayer:\n", gameState.gameState.shots.own, "\nopponent/server\n", gameState.gameState.shots.opponent);
+
     cb({ gameState });
   });
 

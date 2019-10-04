@@ -6,6 +6,14 @@ const rowNumbers = {
   e: 5,
   f: 6
 };
+const EASY = 'EASY';
+const INTERMEDIATE = 'INTERMEDIATE';
+const DIFFICULT = 'DIFFICULT';
+const differentials = {
+  EASY: Number(7),
+  INTERMEDIATE: Number(4),
+  DIFFICULT: Number(2)
+};
 /*
 gameState: {
   player_id: 'sample1',
@@ -62,11 +70,11 @@ function getShotsArray(gameState) {
  * @gameState {object} the board after it was initialized.
  * @return [array]
  */
-function getAShot(socketID) {
-
+function getAShot(gameState, level, socketID = '') {
+  return { row: 'a', col: 1};
 };
 
-module.exports = { getAShot, getShotsArray };
+module.exports = { getAShot, getShotsArray, EASY, INTERMEDIATE, DIFFICULT };
 
 randomizeShots = function(array) {
   let randomized = [];
@@ -85,8 +93,8 @@ randomizeShots = function(array) {
     pos = Math.max(1, Math.floor(Math.random() * moves.length + 1));
     shot = moves.slice(pos - 1, pos);
     moves = moves.slice(0, pos - 1).concat(moves.slice(pos, moves.length));
-    randomized.push(shot);
-    // console.log('While:', randomized, pos);
+    randomized.push(shot[0]);
+    // console.log('While:', shot);
     count += 1;
   }
 

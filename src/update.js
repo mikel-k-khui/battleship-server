@@ -1,3 +1,5 @@
+const { getAShot } = require('./shots');
+
 const rowNumbers = {
   a: 1,
   b: 2,
@@ -32,87 +34,42 @@ gameState: {
  * @return {gameState}
  */
 
-function updateBoard(hit, gameState, knownShots, randomShots) {
-  console.log(game)
-  //add player shot to board
+function updateOpponent(hit, gameState, knownShots, randomShots) {
+  console.log("Before update:", gameState.gameState.turn, " and ", hit);
+  const serverShot = {};
 
-  //check if boat is hit or sunk
+  //add player shot to opponent/server board
+  gameState.gameState.shots.opponent[hit.row][Number(hit.col) - 1] = 1;
 
-  //determine shot by level
-  console.log("In updateBoard");
-  return ({gameState, knownShots, randomShots, serverShot});
-};
-
-module.exports = { updateBoard };
-
-function distributeShips(spotsOccupiedObj) {
-  let shipsArray = [];
-
-  while (shipsArray.length < 5) {
-    let ship = {
-      // assign random spot
-      row: Object.keys(rowNumbers)[randomRow()],
-      col:
-        rowNumbers[
-          Object.keys(rowNumbers)[randomRow()]
-        ],
-      size: 2,
-      sunk: false,
-      horizontal: Math.random() >= 0.5 // true or false
-    };
-
-    if (ShipLocationIsValid(ship, spotsOccupiedObj)) {
-      // now verify that the proposed location is in fact valid, AND NOT OVERLAPPING EXISTING SHIP!
-      shipsArray.push(ship);
-      occupySpots(ship, spotsOccupiedObj);
+  //check if boat exists then update opponent/server boat is hit or sunk
+  if (gameState.gameState.boards.opponent[hit.row][Number(hit.col) - 1] === 1) {
+    //boat exists, check hit or sunk
+    for (const ship of gameState.gameState.ships.opponent) {
+      if (ship.row === hit.row && ship.col === hit.col) {
+        //if ship was hit, then sink it or hit it
+        (ship.hit ? !ship.sunk : !ship.hit)
+      }
     }
   }
-  // console.log("the Board:", spotsOccupiedObj);
-  return { shipsArray, spotsOccupiedObj };
+  console.log(`After updateBoard player `, gameState.gameState.turn, "\nplayer:\n", gameState.gameState.shots.own, "\nopponent/server\n", gameState.gameState.shots.opponent);
 };
 
-function ShipLocationIsValid (ship, spotsOccupiedObj) {
-  if (ship.col === 6 && ship.horizontal === true) {
-    return false;
-  }
-  // ship cannot start in 6th row and be vertical
-  if (ship.row === 'f' && ship.horizontal === false) {
-    return false;
-  }
-  if (ship.horizontal) {
-    if (
-      spotsOccupiedObj[ship.row][ship.col - 1] === 1 ||
-      spotsOccupiedObj[ship.row][ship.col] === 1
-    ) {
-      return false; // ship cannot overlap an existing boat
-    }
-  } else {
-    // ship is vertical
-    if (
-      spotsOccupiedObj[ship.row][ship.col - 1] === 1 ||
-      spotsOccupiedObj[nextChar(ship.row)][ship.col - 1] === 1
-    ) {
-      return false; // ship cannot overlap an existing boat
+function updatePlayer(hit, gameState, knownShots, randomShots) {
+
+  //add player shot to opponent/server board
+  gameState.gameState.shots.own[hit.row][Number(hit.col) - 1] = 1;
+
+  //check if boat exists then update opponent/server boat is hit or sunk
+  if (gameState.gameState.boards.own[hit.row][Number(hit.col) - 1] === 1) {
+    //boat exists, check hit or sunk
+    for (const ship of gameState.gameState.ships.own) {
+      if (ship.row === hit.row && ship.col === hit.col) {
+        //if ship was hit, then sink it or hit it
+        (ship.hit ? !ship.sunk : !ship.hit)
+      }
     }
   }
-  // console.log('Validate location?');
-  return true;
+  console.log(`After updateBoard player `, gameState.gameState.turn, "\nplayer:\n", gameState.gameState.shots.opponent, "\nopponent/server\n", gameState.gameState.shots.own);
 };
 
-occupySpots = function(ship, spotsOccupiedObj) {
-
-  if (ship.horizontal) {
-    spotsOccupiedObj[ship.row][ship.col - 1] = 1;
-    spotsOccupiedObj[ship.row][ship.col] = 1;
-  } else {
-    //if ship is vertical
-    spotsOccupiedObj[ship.row][ship.col - 1] = 1;
-    spotsOccupiedObj[nextChar(ship.row)][ship.col - 1] = 1;
-  }
-  // console.log('After occupySpots in board.js:');
-  return spotsOccupiedObj;
-};
-
-nextChar = (c) => String.fromCharCode(c.charCodeAt(0) + 1);
-
-randomRow = () => Math.floor(Math.random() * Object.keys(rowNumbers).length);
+module.exports = { updateOpponent, updatePlayer };
