@@ -20,71 +20,30 @@ gameState: {
             opponent: [ { row: 'a', col: 4, size: 2, sunk: false, horizontal: true}, ...]
           },
   turn:   { player: 'server',
-            shot: {
-              row: '',
-              col: ''
-            }
+            row: '',
+            col: ''
           }
         }
 */
 
 /**
- * Return the gameState to initiate the game
+ * Return the new gameState to updatethe game state
  * @socketId {socket} socket.
  * @return {gameState}
  */
 
-function initGameBoards(socketId) {
-  // Create deep copies of the game board of the sampleboard will get overwritten
-  const playerCleanBoard = {
-    a: [0, 0, 0, 0, 0, 0],
-    b: [0, 0, 0, 0, 0, 0],
-    c: [0, 0, 0, 0, 0, 0],
-    d: [0, 0, 0, 0, 0, 0],
-    e: [0, 0, 0, 0, 0, 0],
-    f: [0, 0, 0, 0, 0, 0]
-  };
-  const opponentCleanBoard = {
-    a: [0, 0, 0, 0, 0, 0],
-    b: [0, 0, 0, 0, 0, 0],
-    c: [0, 0, 0, 0, 0, 0],
-    d: [0, 0, 0, 0, 0, 0],
-    e: [0, 0, 0, 0, 0, 0],
-    f: [0, 0, 0, 0, 0, 0]
-  };
-  const playerSpotsOccupied = {
-    a: [0, 0, 0, 0, 0, 0],
-    b: [0, 0, 0, 0, 0, 0],
-    c: [0, 0, 0, 0, 0, 0],
-    d: [0, 0, 0, 0, 0, 0],
-    e: [0, 0, 0, 0, 0, 0],
-    f: [0, 0, 0, 0, 0, 0]
-  };
-  const opponentSpotsOccupied = {
-    a: [0, 0, 0, 0, 0, 0],
-    b: [0, 0, 0, 0, 0, 0],
-    c: [0, 0, 0, 0, 0, 0],
-    d: [0, 0, 0, 0, 0, 0],
-    e: [0, 0, 0, 0, 0, 0],
-    f: [0, 0, 0, 0, 0, 0]
-  };
+function updateBoard(hit, gameState, knownShots, randomShots) {
+  console.log(game)
+  //add player shot to board
 
-  player = distributeShips(playerSpotsOccupied);
-  console.log(`initGameBoards of board.js - player${socketId}:\n`, playerCleanBoard, "\n", player['spotsOccupiedObj']);
- 
-  opponent = distributeShips(opponentSpotsOccupied);
-  console.log('initGameBoards of board.js - opponent:\n', opponentCleanBoard, "\n", opponent['spotsOccupiedObj']);
+  //check if boat is hit or sunk
 
-  return { gameState: { 
-    'player_id': socketId,
-    'shots': { 'own': playerCleanBoard, 'opponent': opponentCleanBoard},
-    'boards': { 'own': player['spotsOccupiedObj'], 'opponent': opponent['spotsOccupiedObj']},
-    'ships': { 'own': player['shipsArray'], 'opponent': opponent['shipsArray']},
-    'turn': { player: 'server', shot: { row: '', col: ''}}
-  }};
+  //determine shot by level
+  console.log("In updateBoard");
+  return ({gameState, knownShots, randomShots, serverShot});
 };
 
-module.exports = { initGameBoards };
+module.exports = { updateBoard };
 
 function distributeShips(spotsOccupiedObj) {
   let shipsArray = [];

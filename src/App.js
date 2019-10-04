@@ -53,11 +53,10 @@ const socket = io.on('connect', (socket) => {
     console.log("Received new gameState from client in server:", hit);
     updateBoard(hit, gameState, knownShots, randomShots);
     console.log(gameState);
-    cb('Testing emit-on');
+    cb({ gameState });
   });
 
   /* listener only for API only */
-
   // socket.on('api', (feed) => {
   //   api_id['api'] = feed;
   // });
