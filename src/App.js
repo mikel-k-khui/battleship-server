@@ -52,7 +52,7 @@ const socket = io.on('connect', (socket) => {
   socket.on('gameFeed', (hit, cb) => {
     console.log("Received new gameState from client in server:", hit);
     updateBoard(hit, gameState, knownShots, randomShots);
-    console.log(gameState)
+    console.log(gameState);
     cb('Testing emit-on');
   });
 
