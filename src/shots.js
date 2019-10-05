@@ -63,7 +63,7 @@ const getShotsArray = function(gameState) {
   // console.log('Known shots', knownShots);
 
   return { randomShots, knownShots };
-}
+};
 
 /**
  * Render an array of shots to be sent to client
