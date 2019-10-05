@@ -55,12 +55,11 @@ const socket = io.on('connect', (socket) => {
     updateOpponent(hit, gameState, knownShots, randomShots);
 
     //determine shot by level
-    shotOnPlayer = getAShot(gameState);
+    shotOnPlayer = getAShot(gameState, level, knownShots, randomShots);
 
-    updatePlayer(shotOnPlayer, gameState, knownShots, randomShots)
+    updatePlayer(shotOnPlayer, gameState, knownShots, randomShots);
 
-
-    console.log(`Before call `, gameState.gameState.turn, "\nplayer:\n", gameState.gameState.shots.own, "\nopponent/server\n", gameState.gameState.shots.opponent);
+    console.log(`Before call `, gameState.turn, "\nplayer:\n", gameState.shots.own, "\nopponent/server\n", gameState.shots.opponent);
 
     cb({ gameState });
   });

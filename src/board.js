@@ -75,13 +75,13 @@ function initGameBoards(socketId) {
   opponent = distributeShips(opponentSpotsOccupied);
   // console.log('initGameBoards of board.js - opponent:\n', opponentCleanBoard, "\n", opponent['spotsOccupiedObj']);
 
-  return { gameState: { 
+  return { 
     'player_id': socketId,
     'shots': { 'own': playerCleanBoard, 'opponent': opponentCleanBoard},
     'boards': { 'own': player['spotsOccupiedObj'], 'opponent': opponent['spotsOccupiedObj']},
     'ships': { 'own': player['shipsArray'], 'opponent': opponent['shipsArray']},
     'turn': { player: 'server', shot: { row: '', col: ''}}
-  }};
+  };
 };
 
 module.exports = { initGameBoards };
