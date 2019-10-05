@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+const favicon = require('serve-favicon');
 
 //server settings
 const ENV = process.env.NODE_ENV || 'development';
@@ -18,11 +19,12 @@ const { getAShot, getShotsArray } = require('./shots');
 const { updateOpponent, updatePlayer, updateShot } = require('./update');
 
 app.use(express.static(path.join(__dirname, '../public')));
+app.use(favicon(path.join(__dirname,'../public', 'favicon.ico')));
 
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, '../index.html'));
-//   console.log("In API server.");
-// });
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+  // console.log("In API server.");
+});
 
 const socket = io.on('connect', socket => {
   // console.log(new Date().toISOString() + ' ID ' + socket.id);
