@@ -85,4 +85,16 @@ const updatePlayer = function(hit, gameState, knownShots, randomShots) {
   );
 };
 
-module.exports = { updateOpponent, updatePlayer };
+const updateShot = function(shotOnPlayer, gameState) {
+  gameState.turn.shot.hit = false; // reset to false
+  gameState.turn.shot.row = shotOnPlayer.row;
+  gameState.turn.shot.col = shotOnPlayer.col;
+  console.log('Eeeere is ma boaaard', gameState.boards.own);
+  console.log('Eeeere is ma shot', gameState.boards.own[shotOnPlayer.row][Number(shotOnPlayer.col) - 1]);
+  
+  if (gameState.boards.own[shotOnPlayer.row][Number(shotOnPlayer.col) - 1] === 1) {
+    gameState.turn.shot.hit = true;
+  }
+};
+
+module.exports = { updateOpponent, updatePlayer, updateShot };

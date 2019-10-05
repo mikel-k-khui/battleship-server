@@ -15,7 +15,7 @@ const playerList = {};
 // Game logics
 const { initGameBoards } = require('./board');
 const { getAShot, getShotsArray } = require('./shots');
-const { updateOpponent, updatePlayer } = require('./update');
+const { updateOpponent, updatePlayer, updateShot } = require('./update');
 
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -71,6 +71,8 @@ const socket = io.on('connect', socket => {
     const shotOnPlayer = getAShot(gameState, level, knownShots, randomShots);
 
     updatePlayer(shotOnPlayer, gameState, knownShots, randomShots);
+
+    updateShot(shotOnPlayer, gameState);
 
     console.log(
       `Before call `,
