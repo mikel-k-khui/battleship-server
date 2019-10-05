@@ -28,6 +28,9 @@ gameState: {
   turn:   { player: 'server',
             row: '',
             col: ''
+          },
+  endgame:{ gameOver: boolean,
+            winner: 'player' or 'opponent'
           }
         }
 */

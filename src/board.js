@@ -24,7 +24,10 @@ gameState: {
               row: '',
               col: ''
             }
-          }
+          },
+  endgame:{ gameOver: boolean,
+            winner: 'player' or 'opponent'
+          }          
         }
 */
 

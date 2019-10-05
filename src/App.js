@@ -67,21 +67,23 @@ const socket = io.on('connect', socket => {
     // console.log('Received new gameState from client in server:', hit);
     updateOpponent(hit, gameState, knownShots, randomShots);
 
-    //determine shot by level
-    const shotOnPlayer = getAShot(gameState, level, knownShots, randomShots);
+    if (gameState.endgame.gameOver  === undefined && gameState.endgame.gameOver === false ) {
+      //determine shot by level
+      const shotOnPlayer = getAShot(gameState, level, knownShots, randomShots);
 
-    updatePlayer(shotOnPlayer, gameState, knownShots, randomShots);
+      updatePlayer(shotOnPlayer, gameState, knownShots, randomShots);
 
-    updateShot(shotOnPlayer, gameState);
+      updateShot(shotOnPlayer, gameState);
 
-    // console.log(
-    //   `Before call `,
-    //   gameState.turn,
-    //   '\nplayer:\n',
-    //   gameState.shots.own,
-    //   '\nopponent/server\n',
-    //   gameState.shots.opponent
-    // );
+      // console.log(
+      //   `Before call `,
+      //   gameState.turn,
+      //   '\nplayer:\n',
+      //   gameState.shots.own,
+      //   '\nopponent/server\n',
+      //   gameState.shots.opponent
+      // );
+    }
 
     cb({ gameState });
   });
