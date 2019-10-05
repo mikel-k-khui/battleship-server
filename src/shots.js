@@ -66,10 +66,11 @@ const getShotsArray = function(gameState) {
 };
 
 /**
- * Render an array of shots to be sent to client
+ * Provide a shot on player's board
  * @gameState {object} the board after it was initialized.
  * @return [array]
  */
+
 const getAShot = function(
   gameState,
   level,
@@ -78,6 +79,7 @@ const getAShot = function(
   socketID = ''
 ) {
   console.log('Get a shot', knownShots);
+    
   const chance = Math.random() * differentials[level];
   return knownShots.length !== 0 && chance > 0.5
     ? knownShots.pop()
@@ -86,6 +88,17 @@ const getAShot = function(
 
 module.exports = { getAShot, getShotsArray, EASY, INTERMEDIATE, DIFFICULT };
 
+
+const weighShot = function(gameState, level) {
+
+
+};
+
+/**
+ * Provide a shot on player's board
+ * @array [array] an array of shots to be randomized.
+ * @return [array] randomized
+ */
 const randomizeShots = function(array) {
   let randomized = [];
   let pos = 0;
@@ -95,16 +108,20 @@ const randomizeShots = function(array) {
 
   while (moves.length > 0 && count < array.length) {
     // generate a position of the array randomly
+    pos = Math.max(1, Math.floor(Math.random() * moves.length + 1));
+
     // slice the array by position
+    shot = moves.slice(pos - 1, pos);
+
     // concat the array before (min. is [] per pos = 1)
     // with the array after (max. is [] where length of array)
-    // push the object in the position to the array
-
-    pos = Math.max(1, Math.floor(Math.random() * moves.length + 1));
-    shot = moves.slice(pos - 1, pos);
     moves = moves.slice(0, pos - 1).concat(moves.slice(pos, moves.length));
+
+    // push the object in the position to the array
     randomized.push(shot[0]);
+
     // console.log('While:', shot);
+    // security check to ensure there is no infinite loop
     count += 1;
   }
 
