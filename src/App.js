@@ -19,10 +19,10 @@ const { updateOpponent, updatePlayer, updateShot } = require('./update');
 
 app.use(express.static(path.join(__dirname, '../public')));
 
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, '../index.html'));
-//   console.log("In API server.");
-// });
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+  // console.log("In API server.");
+});
 
 const socket = io.on('connect', socket => {
   // console.log(new Date().toISOString() + ' ID ' + socket.id);
