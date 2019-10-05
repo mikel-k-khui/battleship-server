@@ -54,6 +54,21 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
         //if ship was hit, then sink it or hit it
         ship.hit ? !ship.sunk : !ship.hit;
       }
+      if (ship.horizontal) {
+        if (
+          gameState.shots.opponent[ship.row][ship.col - 1] === 1 &&
+          gameState.shots.opponent[ship.row][ship.col] === 1
+        ) {
+          ship.sunk = true;
+        }
+      } else {
+        if (
+          gameState.shots.opponent[ship.row][ship.col - 1] === 1 &&
+          gameState.shots.opponent[nextChar(ship.row)][ship.col - 1] === 1
+        ) {
+          ship.sunk = true;
+        }
+      }
     }
   }
   console.log(
