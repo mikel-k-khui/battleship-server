@@ -78,7 +78,7 @@ const getAShot = function(
   randomShots,
   socketID = ''
 ) {
-  console.log('Get a shot', knownShots);
+  // console.log('Get a shot', knownShots);
     
   const chance = Math.random() * differentials[level];
   return knownShots.length !== 0 && chance > 0.5

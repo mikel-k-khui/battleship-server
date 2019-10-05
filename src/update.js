@@ -71,14 +71,14 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
       }
     }
   }
-  console.log(
-    `After updateBoard player `,
-    gameState.turn,
-    '\nplayer:\n',
-    gameState.shots.own,
-    '\nopponent/server\n',
-    gameState.shots.opponent
-  );
+  // console.log(
+  //   `After updateBoard player `,
+  //   gameState.turn,
+  //   '\nplayer:\n',
+  //   gameState.shots.own,
+  //   '\nopponent/server\n',
+  //   gameState.shots.opponent
+  // );
 };
 
 const updatePlayer = function(hit, gameState, knownShots, randomShots) {
@@ -110,22 +110,22 @@ const updatePlayer = function(hit, gameState, knownShots, randomShots) {
       }
     }
   }
-  console.log(
-    `After updateBoard player `,
-    gameState.turn,
-    '\nplayer:\n',
-    gameState.shots.opponent,
-    '\nopponent/server\n',
-    gameState.shots.own
-  );
+  // console.log(
+  //   `After updateBoard player `,
+  //   gameState.turn,
+  //   '\nplayer:\n',
+  //   gameState.shots.opponent,
+  //   '\nopponent/server\n',
+  //   gameState.shots.own
+  // );
 };
 
 const updateShot = function(shotOnPlayer, gameState) {
   gameState.turn.shot.hit = false; // reset to false
   gameState.turn.shot.row = shotOnPlayer.row;
   gameState.turn.shot.col = shotOnPlayer.col;
-  console.log('Eeeere is ma boaaard', gameState.boards.own);
-  console.log('Eeeere is ma shot', gameState.boards.own[shotOnPlayer.row][Number(shotOnPlayer.col) - 1]);
+  // console.log('Eeeere is ma boaaard', gameState.boards.own);
+  // console.log('Eeeere is ma shot', gameState.boards.own[shotOnPlayer.row][Number(shotOnPlayer.col) - 1]);
   
   if (gameState.boards.own[shotOnPlayer.row][Number(shotOnPlayer.col) - 1] === 1) {
     gameState.turn.shot.hit = true;
