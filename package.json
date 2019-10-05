@@ -2,9 +2,13 @@
   "name": "battleship-server",
   "version": "1.0.0",
   "description": "Phaser + React + Socket.io battleship",
-  "main": "index.js",
+  "main": "src/App.js",
+  "engines": {
+    "node": "10.3.0"
+  },
   "scripts": {
-    "start": "./node_modules/.bin/nodemon --watch src -e js ./src/App.js",
+    "start": "node ./src/App.js",
+    "watch": "./node_modules/.bin/nodemon --watch src -e js ./src/App.js",
     "test:server": "NODE_ENV=test npm start"
   },
   "repository": {
