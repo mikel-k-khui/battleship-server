@@ -4,7 +4,8 @@
   "description": "Phaser + React + Socket.io battleship",
   "main": "src/App.js",
   "engines": {
-    "node": "10.3.0"
+    "node": "10.16.3",
+    "npm": "6.x"
   },
   "scripts": {
     "start": "node ./src/App.js",
