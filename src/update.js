@@ -9,6 +9,11 @@ const rowNumbers = {
   f: 6
 };
 
+const nextChar = function(c) {
+  return String.fromCharCode(c.charCodeAt(0) + 1);
+};
+
+
 /*
 gameState: {
   player_id: 'sample1',
@@ -72,6 +77,21 @@ const updatePlayer = function(hit, gameState, knownShots, randomShots) {
       if (ship.row === hit.row && ship.col === hit.col) {
         //if ship was hit, then sink it or hit it
         ship.hit ? !ship.sunk : !ship.hit;
+      }
+      if (ship.horizontal) {
+        if (
+          gameState.shots.own[ship.row][ship.col - 1] === 1 &&
+          gameState.shots.own[ship.row][ship.col] === 1
+        ) {
+          ship.sunk = true;
+        }
+      } else {
+        if (
+          gameState.shots.own[ship.row][ship.col - 1] === 1 &&
+          gameState.shots.own[nextChar(ship.row)][ship.col - 1] === 1
+        ) {
+          ship.sunk = true;
+        }
       }
     }
   }
