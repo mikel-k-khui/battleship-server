@@ -10,9 +10,9 @@ const EASY = 'EASY';
 const INTERMEDIATE = 'INTERMEDIATE';
 const DIFFICULT = 'DIFFICULT';
 const differentials = {
-  EASY: Number(7),
-  INTERMEDIATE: Number(4),
-  DIFFICULT: Number(2)
+  EASY: Number(0.6),
+  INTERMEDIATE: Number(0.9),
+  DIFFICULT: Number(1.2)
 };
 /*
 gameState: {
@@ -39,16 +39,16 @@ gameState: {
  * @return { [array], [array] } one array of random shots, one array of known shots
  */
 function getShotsArray(gameState) {
-  // console.log("Pre-randomize Ships:", gameState.gameState.ships.own);
-  // console.log("Pre-randomize Board:", gameState.gameState.boards.own);
+  // console.log("Pre-randomize Ships:", gameState.ships.own);
+  // console.log("Pre-randomize Board:", gameState.boards.own);
   // console.log(gameState);
 
   let knownShots = [];
   let randomShots = [];
 
-  for (const row in gameState.gameState.boards.own) {
-    for (const col in gameState.gameState.boards.own[row]) {
-      if (gameState.gameState.boards.own[row][col] === 1) {
+  for (const row in gameState.boards.own) {
+    for (const col in gameState.boards.own[row]) {
+      if (gameState.boards.own[row][col] === 1) {
         knownShots.push({ 'row': row, 'col': Number(col) + 1});
       } else {
         randomShots.push({ 'row': row, 'col': Number(col) + 1});
@@ -70,8 +70,10 @@ function getShotsArray(gameState) {
  * @gameState {object} the board after it was initialized.
  * @return [array]
  */
-function getAShot(gameState, level, socketID = '') {
-  return { row: 'a', col: 1};
+function getAShot(gameState, level, knownShots, randomShots, socketID = '') {
+  console.log("Get a shot", knownShots);
+  const chance = Math.random() * differentials[level];
+  return ( knownShots.length !== 0 && chance > 0.5  ? knownShots.pop() : randomShots.pop() );
 };
 
 module.exports = { getAShot, getShotsArray, EASY, INTERMEDIATE, DIFFICULT };
