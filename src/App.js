@@ -29,7 +29,7 @@ const socket = io.on('connect', socket => {
   let gameState = {};
   let randomShots = {};
   let knownShots = {};
-  let level = 'DIFFICULT';
+  let level = 'EASY';
 
   /* Player socket listenrs and logic calls */
   socket.on('player', (socketId, cb) => {

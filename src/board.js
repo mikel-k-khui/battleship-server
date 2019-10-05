@@ -83,7 +83,8 @@ const initGameBoards = function(socketId) {
       opponent: opponent['spotsOccupiedObj']
     },
     ships: { own: player['shipsArray'], opponent: opponent['shipsArray'] },
-    turn: { player: 'server', shot: { row: '', col: 0, hit: false } }
+    turn: { player: 'server', shot: { row: '', col: 0, hit: false } },
+    endGame: { gameOver: false, kraken: false, winner: null}
   };
 };
 

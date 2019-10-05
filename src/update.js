@@ -13,7 +13,6 @@ const nextChar = function(c) {
   return String.fromCharCode(c.charCodeAt(0) + 1);
 };
 
-
 /*
 gameState: {
   player_id: 'sample1',
@@ -42,6 +41,7 @@ gameState: {
 const updateOpponent = function(hit, gameState, knownShots, randomShots) {
   console.log('Before update:', gameState.turn, ' and ', hit);
   const serverShot = {};
+  let boatsSunk = 0;
 
   //add player shot to opponent/server board
   gameState.shots.opponent[hit.row][Number(hit.col) - 1] = 1;
@@ -54,21 +54,43 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
         //if ship was hit, then sink it or hit it
         ship.hit ? !ship.sunk : !ship.hit;
       }
+      if (ship.horizontal) {
+        if (
+          gameState.shots.opponent[ship.row][ship.col - 1] === 1 &&
+          gameState.shots.opponent[ship.row][ship.col] === 1
+        ) {
+          ship.sunk = true;
+          boatsSunk++;
+        }
+      } else {
+        if (
+          gameState.shots.opponent[ship.row][ship.col - 1] === 1 &&
+          gameState.shots.opponent[nextChar(ship.row)][ship.col - 1] === 1
+        ) {
+          ship.sunk = true;
+          boatsSunk++;
+        }
+      }
     }
   }
-  console.log(
-    `After updateBoard player `,
-    gameState.turn,
-    '\nplayer:\n',
-    gameState.shots.own,
-    '\nopponent/server\n',
-    gameState.shots.opponent
-  );
+  // console.log(
+  //   `After updateBoard player `,
+  //   gameState.turn,
+  //   '\nplayer:\n',
+  //   gameState.shots.own,
+  //   '\nopponent/server\n',
+  //   gameState.shots.opponent
+  // );
+  if (boatsSunk === 5) {
+    gameState.endGame.gameOver = true;
+    gameState.endGame.winner = 'player';
+  }
 };
 
 const updatePlayer = function(hit, gameState, knownShots, randomShots) {
   //add player shot to opponent/server board
   gameState.shots.own[hit.row][Number(hit.col) - 1] = 1;
+  let boatsSunk = 0;
 
   //check if boat exists then update opponent/server boat is hit or sunk
   if (gameState.boards.own[hit.row][Number(hit.col) - 1] === 1) {
@@ -84,6 +106,7 @@ const updatePlayer = function(hit, gameState, knownShots, randomShots) {
           gameState.shots.own[ship.row][ship.col] === 1
         ) {
           ship.sunk = true;
+          boatsSunk++;
         }
       } else {
         if (
@@ -91,28 +114,33 @@ const updatePlayer = function(hit, gameState, knownShots, randomShots) {
           gameState.shots.own[nextChar(ship.row)][ship.col - 1] === 1
         ) {
           ship.sunk = true;
+          boatsSunk++;
         }
       }
     }
   }
-  console.log(
-    `After updateBoard player `,
-    gameState.turn,
-    '\nplayer:\n',
-    gameState.shots.opponent,
-    '\nopponent/server\n',
-    gameState.shots.own
-  );
+  // console.log(
+  //   `After updateBoard player `,
+  //   gameState.turn,
+  //   '\nplayer:\n',
+  //   gameState.shots.opponent,
+  //   '\nopponent/server\n',
+  //   gameState.shots.own
+  // );
+  if (boatsSunk === 5) {
+    gameState.endGame.gameOver = true;
+    gameState.endGame.winner = 'opponent';
+  }
 };
 
 const updateShot = function(shotOnPlayer, gameState) {
   gameState.turn.shot.hit = false; // reset to false
   gameState.turn.shot.row = shotOnPlayer.row;
   gameState.turn.shot.col = shotOnPlayer.col;
-  console.log('Eeeere is ma boaaard', gameState.boards.own);
-  console.log('Eeeere is ma shot', gameState.boards.own[shotOnPlayer.row][Number(shotOnPlayer.col) - 1]);
-  
-  if (gameState.boards.own[shotOnPlayer.row][Number(shotOnPlayer.col) - 1] === 1) {
+
+  if (
+    gameState.boards.own[shotOnPlayer.row][Number(shotOnPlayer.col) - 1] === 1
+  ) {
     gameState.turn.shot.hit = true;
   }
 };
