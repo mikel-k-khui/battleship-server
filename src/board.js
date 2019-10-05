@@ -7,7 +7,7 @@ const rowNumbers = {
   f: 6
 };
 
-/*  
+/*
 gameState: {
   player_id: 'sample1',
   shots: { own: { a: [0,0,0,0,0,1], ... },
@@ -34,7 +34,7 @@ gameState: {
  * @return {gameState}
  */
 
-function initGameBoards(socketId) {
+const initGameBoards = function(socketId) {
   // Create deep copies of the game board of the sampleboard will get overwritten
   const playerCleanBoard = {
     a: [0, 0, 0, 0, 0, 0],
@@ -69,34 +69,34 @@ function initGameBoards(socketId) {
     f: [0, 0, 0, 0, 0, 0]
   };
 
-  player = distributeShips(playerSpotsOccupied);
+  let player = distributeShips(playerSpotsOccupied);
   // console.log(`initGameBoards of board.js - player${socketId}:\n`, playerCleanBoard, "\n", player['spotsOccupiedObj']);
- 
-  opponent = distributeShips(opponentSpotsOccupied);
+
+  let opponent = distributeShips(opponentSpotsOccupied);
   // console.log('initGameBoards of board.js - opponent:\n', opponentCleanBoard, "\n", opponent['spotsOccupiedObj']);
 
-  return { gameState: { 
-    'player_id': socketId,
-    'shots': { 'own': playerCleanBoard, 'opponent': opponentCleanBoard},
-    'boards': { 'own': player['spotsOccupiedObj'], 'opponent': opponent['spotsOccupiedObj']},
-    'ships': { 'own': player['shipsArray'], 'opponent': opponent['shipsArray']},
-    'turn': { player: 'server', shot: { row: '', col: ''}}
-  }};
+  return {
+    player_id: socketId,
+    shots: { own: playerCleanBoard, opponent: opponentCleanBoard },
+    boards: {
+      own: player['spotsOccupiedObj'],
+      opponent: opponent['spotsOccupiedObj']
+    },
+    ships: { own: player['shipsArray'], opponent: opponent['shipsArray'] },
+    turn: { player: 'server', shot: { row: '', col: 0, hit: false } }
+  };
 };
 
 module.exports = { initGameBoards };
 
-function distributeShips(spotsOccupiedObj) {
+const distributeShips = function(spotsOccupiedObj) {
   let shipsArray = [];
 
   while (shipsArray.length < 5) {
     let ship = {
       // assign random spot
       row: Object.keys(rowNumbers)[randomRow()],
-      col:
-        rowNumbers[
-          Object.keys(rowNumbers)[randomRow()]
-        ],
+      col: rowNumbers[Object.keys(rowNumbers)[randomRow()]],
       size: 2,
       sunk: false,
       hit: false,
@@ -113,7 +113,7 @@ function distributeShips(spotsOccupiedObj) {
   return { shipsArray, spotsOccupiedObj };
 };
 
-function ShipLocationIsValid (ship, spotsOccupiedObj) {
+const ShipLocationIsValid = function(ship, spotsOccupiedObj) {
   if (ship.col === 6 && ship.horizontal === true) {
     return false;
   }
@@ -141,8 +141,7 @@ function ShipLocationIsValid (ship, spotsOccupiedObj) {
   return true;
 };
 
-occupySpots = function(ship, spotsOccupiedObj) {
-
+const occupySpots = function(ship, spotsOccupiedObj) {
   if (ship.horizontal) {
     spotsOccupiedObj[ship.row][ship.col - 1] = 1;
     spotsOccupiedObj[ship.row][ship.col] = 1;
@@ -155,6 +154,7 @@ occupySpots = function(ship, spotsOccupiedObj) {
   return spotsOccupiedObj;
 };
 
-nextChar = (c) => String.fromCharCode(c.charCodeAt(0) + 1);
+const nextChar = c => String.fromCharCode(c.charCodeAt(0) + 1);
 
-randomRow = () => Math.floor(Math.random() * Object.keys(rowNumbers).length);
+const randomRow = () =>
+  Math.floor(Math.random() * Object.keys(rowNumbers).length);
