@@ -4,6 +4,7 @@
   "description": "Phaser + React + Socket.io battleship",
   "main": "index.js",
   "scripts": {
+    "build": "node ./src/App.js",
     "start": "./node_modules/.bin/nodemon --watch src -e js ./src/App.js",
     "test:server": "NODE_ENV=test npm start"
   },
