@@ -1,11 +1,11 @@
 const path = require('path');
 const express = require('express');
-const app = express();  
+const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 //server settings
-const ENV = process.env.NODE_ENV || "development"; 
+const ENV = process.env.NODE_ENV || 'development';
 const PORT = process.env.PORT || 8001;
 
 //socket management
@@ -24,13 +24,12 @@ app.use(express.static(path.join(__dirname, '../public')));
 //   console.log("In API server.");
 // });
 
-const socket = io.on('connect', (socket) => {
-
-  console.log((new Date().toISOString()) + ' ID ' + socket.id);
+const socket = io.on('connect', socket => {
+  console.log(new Date().toISOString() + ' ID ' + socket.id);
   let gameState = {};
   let randomShots = {};
   let knownShots = {};
-  let level = 'EASY';
+  let level = 'DIFFICULT';
 
   /* Player socket listenrs and logic calls */
   socket.on('player', (socketId, cb) => {
@@ -44,22 +43,43 @@ const socket = io.on('connect', (socket) => {
     gameState = initGameBoards(socket.id);
 
     ({ randomShots, knownShots, ...rest } = getShotsArray(gameState));
-    console.log("Confirmed player from client in server's id:", socket.id, " with game as ", gameState, " and shots:", randomShots);
+    console.log(
+      "Confirmed player from client in server's id:",
+      socket.id,
+      ' with game as ',
+      gameState,
+      ' and shots:',
+      randomShots
+    );
 
-    //send gameState with players' board, players' boats, 
-    cb({ serverId: socket.id, clientId: socketId, gameState, randomShots, knownShots, rest });
+    //send gameState with players' board, players' boats,
+    cb({
+      serverId: socket.id,
+      clientId: socketId,
+      gameState,
+      randomShots,
+      knownShots,
+      rest
+    });
   });
 
   socket.on('gameFeed', (hit, cb) => {
-    console.log("Received new gameState from client in server:", hit);
+    console.log('Received new gameState from client in server:', hit);
     updateOpponent(hit, gameState, knownShots, randomShots);
 
     //determine shot by level
-    shotOnPlayer = getAShot(gameState, level, knownShots, randomShots);
+    const shotOnPlayer = getAShot(gameState, level, knownShots, randomShots);
 
     updatePlayer(shotOnPlayer, gameState, knownShots, randomShots);
 
-    console.log(`Before call `, gameState.turn, "\nplayer:\n", gameState.shots.own, "\nopponent/server\n", gameState.shots.opponent);
+    console.log(
+      `Before call `,
+      gameState.turn,
+      '\nplayer:\n',
+      gameState.shots.own,
+      '\nopponent/server\n',
+      gameState.shots.opponent
+    );
 
     cb({ gameState });
   });
@@ -70,13 +90,11 @@ const socket = io.on('connect', (socket) => {
   // });
 
   socket.on('shotFeed', (feed, cb) => {
-    console.log("Before send shot:", feed);
+    console.log('Before send shot:', feed);
     sendShot(feed, socket);
-    console.log("Received feed from test page in server:", feed);
+    console.log('Received feed from test page in server:', feed);
     cb('sample');
   });
-
-
 }); // end of io.on wrapping all socket listeners
 
 /**
@@ -85,9 +103,9 @@ const socket = io.on('connect', (socket) => {
  * @aSocket {string} socket of the player.
  * @return [callback fn(data from io.on in client(s))]
  */
-function sendShot(target, aSocket) {
+const sendShot = function(target, aSocket) {
   socket.emit('serverFeed', target);
-  console.log("Sent to", socket.id);
+  console.log('Sent to', socket.id);
   // io.to('aSocket').emit('serverFeed', target, (ack) => {
   //   console.log("Does emit has a callback?", ack);
   // });

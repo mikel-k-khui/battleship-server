@@ -9,7 +9,7 @@ const rowNumbers = {
   f: 6
 };
 
-/*  
+/*
 gameState: {
   player_id: 'sample1',
   shots: { own: { a: [0,0,0,0,0,1], ... },
@@ -34,8 +34,8 @@ gameState: {
  * @return {gameState}
  */
 
-function updateOpponent(hit, gameState, knownShots, randomShots) {
-  console.log("Before update:", gameState.turn, " and ", hit);
+const updateOpponent = function(hit, gameState, knownShots, randomShots) {
+  console.log('Before update:', gameState.turn, ' and ', hit);
   const serverShot = {};
 
   //add player shot to opponent/server board
@@ -47,15 +47,21 @@ function updateOpponent(hit, gameState, knownShots, randomShots) {
     for (const ship of gameState.ships.opponent) {
       if (ship.row === hit.row && ship.col === hit.col) {
         //if ship was hit, then sink it or hit it
-        (ship.hit ? !ship.sunk : !ship.hit)
+        ship.hit ? !ship.sunk : !ship.hit;
       }
     }
   }
-  console.log(`After updateBoard player `, gameState.turn, "\nplayer:\n", gameState.shots.own, "\nopponent/server\n", gameState.shots.opponent);
+  console.log(
+    `After updateBoard player `,
+    gameState.turn,
+    '\nplayer:\n',
+    gameState.shots.own,
+    '\nopponent/server\n',
+    gameState.shots.opponent
+  );
 };
 
-function updatePlayer(hit, gameState, knownShots, randomShots) {
-
+const updatePlayer = function(hit, gameState, knownShots, randomShots) {
   //add player shot to opponent/server board
   gameState.shots.own[hit.row][Number(hit.col) - 1] = 1;
 
@@ -65,11 +71,18 @@ function updatePlayer(hit, gameState, knownShots, randomShots) {
     for (const ship of gameState.ships.own) {
       if (ship.row === hit.row && ship.col === hit.col) {
         //if ship was hit, then sink it or hit it
-        (ship.hit ? !ship.sunk : !ship.hit)
+        ship.hit ? !ship.sunk : !ship.hit;
       }
     }
   }
-  console.log(`After updateBoard player `, gameState.turn, "\nplayer:\n", gameState.shots.opponent, "\nopponent/server\n", gameState.shots.own);
+  console.log(
+    `After updateBoard player `,
+    gameState.turn,
+    '\nplayer:\n',
+    gameState.shots.opponent,
+    '\nopponent/server\n',
+    gameState.shots.own
+  );
 };
 
 module.exports = { updateOpponent, updatePlayer };

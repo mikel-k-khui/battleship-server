@@ -38,7 +38,7 @@ gameState: {
  * @gameState {object} the board after it was initialized.
  * @return { [array], [array] } one array of random shots, one array of known shots
  */
-function getShotsArray(gameState) {
+const getShotsArray = function(gameState) {
   // console.log("Pre-randomize Ships:", gameState.ships.own);
   // console.log("Pre-randomize Board:", gameState.boards.own);
   // console.log(gameState);
@@ -49,13 +49,13 @@ function getShotsArray(gameState) {
   for (const row in gameState.boards.own) {
     for (const col in gameState.boards.own[row]) {
       if (gameState.boards.own[row][col] === 1) {
-        knownShots.push({ 'row': row, 'col': Number(col) + 1});
+        knownShots.push({ row: row, col: Number(col) + 1 });
       } else {
-        randomShots.push({ 'row': row, 'col': Number(col) + 1});
+        randomShots.push({ row: row, col: Number(col) + 1 });
       }
     }
   }
-  
+
   knownShots = randomizeShots(knownShots.slice());
   randomShots = randomizeShots(randomShots.slice());
 
@@ -63,22 +63,30 @@ function getShotsArray(gameState) {
   // console.log('Known shots', knownShots);
 
   return { randomShots, knownShots };
-};
+}
 
 /**
  * Render an array of shots to be sent to client
  * @gameState {object} the board after it was initialized.
  * @return [array]
  */
-function getAShot(gameState, level, knownShots, randomShots, socketID = '') {
-  console.log("Get a shot", knownShots);
+const getAShot = function(
+  gameState,
+  level,
+  knownShots,
+  randomShots,
+  socketID = ''
+) {
+  console.log('Get a shot', knownShots);
   const chance = Math.random() * differentials[level];
-  return ( knownShots.length !== 0 && chance > 0.5  ? knownShots.pop() : randomShots.pop() );
+  return knownShots.length !== 0 && chance > 0.5
+    ? knownShots.pop()
+    : randomShots.pop();
 };
 
 module.exports = { getAShot, getShotsArray, EASY, INTERMEDIATE, DIFFICULT };
 
-randomizeShots = function(array) {
+const randomizeShots = function(array) {
   let randomized = [];
   let pos = 0;
   let shot = {};
