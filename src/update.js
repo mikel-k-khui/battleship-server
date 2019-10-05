@@ -70,6 +70,21 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
         ship.sunk = true;
         boatsSunk++;
       }
+      if (ship.horizontal) {
+        if (
+          gameState.shots.opponent[ship.row][ship.col - 1] === 1 &&
+          gameState.shots.opponent[ship.row][ship.col] === 1
+        ) {
+          ship.sunk = true;
+        }
+      } else {
+        if (
+          gameState.shots.opponent[ship.row][ship.col - 1] === 1 &&
+          gameState.shots.opponent[nextChar(ship.row)][ship.col - 1] === 1
+        ) {
+          ship.sunk = true;
+        }
+      }
     }
   }
   // }

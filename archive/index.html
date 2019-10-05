@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Battleship Server tester for server-side socket</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+  </head>
+  <body>
+    <form>
+      <h2>Enter a battle ship move (From A0 to F5) with socket</h2>
+      <input
+        className="battleship__row--emit"
+        id="shot_row"
+        name="Battle ship move row"
+        type="text"
+        placeholder="a-f"
+      />
+      <input
+      className="battleship__col--emit"
+      id="shot_col"
+      name="Battle ship move col"
+      type="text"
+      placeholder="0-5"
+    />
+      <button type="submit" class="send__shot">Shot</button>
+      <h3></h3>
+    </form>
+    <!-- External JS -->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io('http://localhost:8001');
+      var player_id = '';
+
+      socket.on('connect', () => {
+        console.log("Socket:", typeof socket, ", ", socket);
+        alert(`Connected to server with ${socket.id}`);
+        socket.emit('api', socket.id);
+      });
+
+      socket.on('api', (player) => {
+        player_id = player;
+      });
+
+      $('form').submit((event) => {
+          event.preventDefault();
+
+          let gameState = {player: 'server'};
+          gameState['row'] = document.querySelector( "#shot_row" ).value;
+          gameState['col'] = document.querySelector( "#shot_col" ).value;
+          let data = gameState;
+          
+          socket.emit('shotFeed', data, (res) => {
+            console.log("After submit's emit:", res);
+            $('h3').text(`Shot fired @${data.row},${data.col}!`);
+            $('.battleship__row--emit').val('');
+            $('.battleship__col--emit').val('');
+          });
+        });
+    </script>
+  </body>
+</html>
