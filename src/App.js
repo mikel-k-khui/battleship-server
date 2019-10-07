@@ -67,13 +67,13 @@ const socket = io.on('connect', socket => {
 
   socket.on('gameFeed', (hit, cb) => {
     // console.log('Received new gameState from client in server:', hit);
-    updateOpponent(hit, gameState, knownShots, randomShots);
+    updateOpponent(hit, gameState);
 
-    if (gameState.endgame.gameOver  === undefined && gameState.endgame.gameOver === false ) {
+    if (gameState.endGame.gameOver === false ) {
       //determine shot by level
       const shotOnPlayer = getAShot(gameState, level, knownShots, randomShots);
 
-      updatePlayer(shotOnPlayer, gameState, knownShots, randomShots);
+      updatePlayer(shotOnPlayer, gameState);
 
       updateShot(shotOnPlayer, gameState);
 
