@@ -90,7 +90,7 @@ module.exports = { getAShot, getShotsArray, EASY, INTERMEDIATE, DIFFICULT };
 
 
 const weighShot = function(gameState, level) {
-
+  
 
 };
 

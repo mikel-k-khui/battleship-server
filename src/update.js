@@ -28,8 +28,8 @@ gameState: {
   turn:   { player: 'server',
             row: '',
             col: ''
-          },
-  endgame:{ gameOver: boolean,
+          }
+  endGame:{ gameOver: boolean,
             winner: 'player' or 'opponent'
           }
         }
@@ -42,7 +42,7 @@ gameState: {
  */
 
 const updateOpponent = function(hit, gameState, knownShots, randomShots) {
-  console.log('Before update:', gameState.turn, ' and ', hit);
+  // console.log('Before update:', gameState.turn, ' and ', hit);
   const serverShot = {};
   let boatsSunk = 0;
 
@@ -55,6 +55,13 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
   for (const ship of gameState.ships.opponent) {
     if (ship.horizontal) {
       if (
+        (ship.row === hit.row && ship.col === hit.col) ||
+        (ship.row === hit.row && ship.col + 1 === hit.col)
+      ) {
+        // if ship is hit
+        ship.hit = true;
+      }
+      if (
         gameState.shots.opponent[ship.row][ship.col - 1] === 1 &&
         gameState.shots.opponent[ship.row][ship.col] === 1
       ) {
@@ -62,6 +69,14 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
         boatsSunk++;
       }
     } else {
+      // ship is vertical
+      if (
+        (ship.row === hit.row && ship.col === hit.col) ||
+        (nextChar(ship.row) === hit.row && ship.col === hit.col)
+      ) {
+        //if ship was hit
+        ship.hit = true;
+      }
       if (
         gameState.shots.opponent[ship.row][ship.col - 1] === 1 &&
         gameState.shots.opponent[nextChar(ship.row)][ship.col - 1] === 1
@@ -70,6 +85,7 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
         boatsSunk++;
       }
     }
+
   }
   // }
   // console.log(
@@ -87,6 +103,8 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
 };
 
 const updatePlayer = function(hit, gameState, knownShots, randomShots) {
+  // console.log('Before update player:', gameState.shots.own, ' and ', hit);
+
   //add player shot to opponent/server board
   gameState.shots.own[hit.row][Number(hit.col) - 1] = 1;
   let boatsSunk = 0;
@@ -95,6 +113,7 @@ const updatePlayer = function(hit, gameState, knownShots, randomShots) {
   // if (gameState.boards.own[hit.row][Number(hit.col) - 1] === 1) {
   //boat exists, check hit or sunk
   for (const ship of gameState.ships.own) {
+    
     if (ship.horizontal) {
       if (
         (ship.row === hit.row && ship.col === hit.col) ||
