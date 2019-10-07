@@ -19,9 +19,9 @@ const { getAShot, getShotsArray } = require('./shots');
 const { updateOpponent, updatePlayer, updateShot } = require('./update');
 
 app.use(express.static(path.join(__dirname, '../public')));
-app.use(favicon(path.join(__dirname,'../public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
   // console.log("In API server.");
 });
@@ -69,7 +69,10 @@ const socket = io.on('connect', socket => {
     // console.log('Received new gameState from client in server:', hit);
     updateOpponent(hit, gameState, knownShots, randomShots);
 
-    if (gameState.endgame.gameOver  === undefined && gameState.endgame.gameOver === false ) {
+    if (
+      gameState.endGame.gameOver === undefined ||
+      gameState.endGame.gameOver === false
+    ) {
       //determine shot by level
       const shotOnPlayer = getAShot(gameState, level, knownShots, randomShots);
 
