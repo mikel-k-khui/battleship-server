@@ -115,13 +115,9 @@ const socket = io.on('connect', socket => {
  * @aSocket {string} socket of the player.
  * @return [callback fn(data from io.on in client(s))]
  */
-const sendShot = function(target, aSocket) {
-  socket.emit('serverFeed', target);
-  // console.log('Sent to', socket.id);
-  // io.to('aSocket').emit('serverFeed', target, (ack) => {
-  //   console.log("Does emit has a callback?", ack);
-  // });
-};
+// const sendShot = function(target, aSocket) {
+//   socket.emit('serverFeed', target);
+// };
 
 server.listen(PORT, () => {
   console.log(`Listening on port ${PORT} in ${ENV} mode.`);
