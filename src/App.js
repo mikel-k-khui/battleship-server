@@ -27,7 +27,7 @@ app.get('/', function(req, res) {
 });
 
 const socket = io.on('connect', socket => {
-  // console.log(new Date().toISOString() + ' ID ' + socket.id);
+  console.log(new Date().toISOString() + ' ID ' + socket.id);
   let gameState = {};
   let randomShots = {};
   let knownShots = {};
@@ -102,6 +102,11 @@ const socket = io.on('connect', socket => {
     // console.log('Received feed from test page in server:', feed);
     cb('sample');
   });
+
+  socket.on('disconnect', feed => {
+    console.log('Disconnected:', feed, " @", new Date().toISOString());
+  });
+
 }); // end of io.on wrapping all socket listeners
 
 /**
