@@ -27,7 +27,7 @@ gameState: {
           },
   endgame:{ gameOver: boolean,
             winner: 'player' or 'opponent'
-          }          
+          }
         }
 */
 
@@ -87,7 +87,7 @@ const initGameBoards = function(socketId) {
     },
     ships: { own: player['shipsArray'], opponent: opponent['shipsArray'] },
     turn: { player: 'server', shot: { row: '', col: 0, hit: false } },
-    endGame: { gameOver: false, kraken: false, winner: null}
+    endGame: { gameOver: false, kraken: false, winner: null }
   };
 };
 

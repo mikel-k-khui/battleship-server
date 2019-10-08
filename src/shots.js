@@ -12,7 +12,7 @@ const DIFFICULT = 'DIFFICULT';
 const differentials = {
   EASY: Number(7),
   INTERMEDIATE: Number(4),
-  DIFFICULT: Number(2)
+  DIFFICULT: Number(0)
 };
 /*
 gameState: {
@@ -78,17 +78,17 @@ const getAShot = function(
   randomShots,
   socketID = ''
 ) {
-
   const chance = Math.random() + Number(weighShot(gameState, level));
 
   // Give a known shots if a) random chance > 60%, b) weigh shots with differentials, c) no more random shots
-  
-  return (randomShots.length === 0 || (knownShots.length > 0 && chance > 0.7))  ? knownShots.pop() : randomShots.pop(); 
+  console.log(chance);
 
+  return randomShots.length === 0 || (knownShots.length > 0 && chance > 0.7)
+    ? knownShots.pop()
+    : randomShots.pop();
 };
 
 module.exports = { getAShot, getShotsArray, EASY, INTERMEDIATE, DIFFICULT };
-
 
 const weighShot = function(gameState, level) {
   let ownSunk = 0;
@@ -101,8 +101,14 @@ const weighShot = function(gameState, level) {
   for (const ship of gameState.ships.opponent) {
     opponentSunk += Number(ship.hit) + Number(ship.sunk);
   }
-  console.log("In weighShot", ownSunk, " vs opp", opponentSunk);
-  return (Number(ownSunk) + differentials[level] <= opponentSunk) ? 1 : 0;
+  console.log(
+    'In weighShot',
+    ownSunk,
+    differentials[level],
+    ' vs opp',
+    opponentSunk
+  );
+  return Number(ownSunk) + differentials[level] <= opponentSunk ? 1 : 0;
 };
 
 /**
