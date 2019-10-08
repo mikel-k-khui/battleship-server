@@ -19,22 +19,22 @@ const { getAShot, getShotsArray } = require('./shots');
 const { updateOpponent, updatePlayer, updateShot } = require('./update');
 
 app.use(express.static(path.join(__dirname, '../public')));
-app.use(favicon(path.join(__dirname,'../public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
   // console.log("In API server.");
 });
 
 const socket = io.on('connect', socket => {
-  // console.log(new Date().toISOString() + ' ID ' + socket.id);
+  console.log(new Date().toISOString() + ' ID ' + socket.id);
   let gameState = {};
   let randomShots = {};
   let knownShots = {};
-  let level = 'DIFFICULT';
+  let level = 'EASY';
 
   /* Player socket listenrs and logic calls */
-  socket.on('player', (socketId, cb) => {
+  socket.on('player', (socketId, lev, cb) => {
     //check socketID = socket.id
     playerList[socket.id] = {
       player_id: socket.id,
@@ -42,6 +42,8 @@ const socket = io.on('connect', socket => {
       ships: null,
       turn: null
     };
+    level = lev;
+
     gameState = initGameBoards(socket.id);
 
     ({ randomShots, knownShots, ...rest } = getShotsArray(gameState));
@@ -59,8 +61,6 @@ const socket = io.on('connect', socket => {
       serverId: socket.id,
       clientId: socketId,
       gameState,
-      randomShots,
-      knownShots,
       rest
     });
   });
@@ -102,6 +102,11 @@ const socket = io.on('connect', socket => {
     // console.log('Received feed from test page in server:', feed);
     cb('sample');
   });
+
+  socket.on('disconnect', feed => {
+    console.log('Disconnected:', feed, " @", new Date().toISOString());
+  });
+
 }); // end of io.on wrapping all socket listeners
 
 /**
@@ -110,13 +115,9 @@ const socket = io.on('connect', socket => {
  * @aSocket {string} socket of the player.
  * @return [callback fn(data from io.on in client(s))]
  */
-const sendShot = function(target, aSocket) {
-  socket.emit('serverFeed', target);
-  // console.log('Sent to', socket.id);
-  // io.to('aSocket').emit('serverFeed', target, (ack) => {
-  //   console.log("Does emit has a callback?", ack);
-  // });
-};
+// const sendShot = function(target, aSocket) {
+//   socket.emit('serverFeed', target);
+// };
 
 server.listen(PORT, () => {
   console.log(`Listening on port ${PORT} in ${ENV} mode.`);

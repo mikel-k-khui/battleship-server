@@ -10,9 +10,9 @@ const EASY = 'EASY';
 const INTERMEDIATE = 'INTERMEDIATE';
 const DIFFICULT = 'DIFFICULT';
 const differentials = {
-  EASY: Number(0.6),
-  INTERMEDIATE: Number(0.9),
-  DIFFICULT: Number(1.2)
+  EASY: Number(7),
+  INTERMEDIATE: Number(4),
+  DIFFICULT: Number(2)
 };
 /*
 gameState: {
@@ -23,7 +23,7 @@ gameState: {
   boards: { own: { a: [0,0,0,0,0,1], ... },
             opponent: { a: [1,0,0,0,0,0], ... }
           },
-  ships:  { own:[ { row: 'a', col: 4, size: 2, sunk: false, horizontal: true}, ...],
+  ships:  { own:[ { row: 'a', col: 4, size: 2, sunk: false, hit: false, horizontal: true}, ...],
             opponent: [ { row: 'a', col: 4, size: 2, sunk: false, horizontal: true}, ...]
           },
   turn:   { player: 'server',
@@ -78,20 +78,31 @@ const getAShot = function(
   randomShots,
   socketID = ''
 ) {
-  // console.log('Get a shot', knownShots);
-    
-  const chance = Math.random() * differentials[level];
-  return knownShots.length !== 0 && chance > 0.5
-    ? knownShots.pop()
-    : randomShots.pop();
+
+  const chance = Math.random() + Number(weighShot(gameState, level));
+
+  // Give a known shots if a) random chance > 60%, b) weigh shots with differentials, c) no more random shots
+  
+  return (randomShots.length === 0 || (knownShots.length > 0 && chance > 0.7))  ? knownShots.pop() : randomShots.pop(); 
+
 };
 
 module.exports = { getAShot, getShotsArray, EASY, INTERMEDIATE, DIFFICULT };
 
 
 const weighShot = function(gameState, level) {
-  
+  let ownSunk = 0;
+  let opponentSunk = 0;
 
+  for (const ship of gameState.ships.own) {
+    ownSunk += Number(ship.hit) + Number(ship.sunk);
+  }
+
+  for (const ship of gameState.ships.opponent) {
+    opponentSunk += Number(ship.hit) + Number(ship.sunk);
+  }
+  console.log("In weighShot", ownSunk, " vs opp", opponentSunk);
+  return (Number(ownSunk) + differentials[level] <= opponentSunk) ? 1 : 0;
 };
 
 /**

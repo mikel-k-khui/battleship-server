@@ -51,11 +51,8 @@ const updateOpponent = function(hit, gameState, knownShots, randomShots) {
 
   //check if boat exists then update opponent/server boat is hit or sunk
   // if (gameState.boards.opponent[hit.row][Number(hit.col) - 1] === 1) {
-  //boat exists, check hit or sunk
+  //boat exists, check hit or sunk, does not update HIT status as we don't see this as a player
   for (const ship of gameState.ships.opponent) {
-    // boat can have 3 spots to be hit: 1st is anchor at the upper left corner, example [a, 1]
-    // then needs to check if the hit landed on spot below of the anchor, example [b, 1]
-    // then needs to check if the hit landed on spot right of the anchor for horizontal boats [a, 2]
     if (ship.horizontal) {
       if (
         (ship.row === hit.row && ship.col === hit.col) ||
