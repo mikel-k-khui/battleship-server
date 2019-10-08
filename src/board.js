@@ -76,7 +76,7 @@ const initGameBoards = function(socketId) {
   // console.log(`initGameBoards of board.js - player${socketId}:\n`, playerCleanBoard, "\n", player['spotsOccupiedObj']);
 
   let opponent = distributeShips(opponentSpotsOccupied);
-  // console.log('initGameBoards of board.js - opponent:\n', opponentCleanBoard, "\n", opponent['spotsOccupiedObj']);
+  console.log('initGameBoards of board.js - opponent:\n', opponentCleanBoard, "\n", opponent['spotsOccupiedObj']);
 
   return {
     player_id: socketId,

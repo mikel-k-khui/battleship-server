@@ -31,10 +31,10 @@ const socket = io.on('connect', socket => {
   let gameState = {};
   let randomShots = {};
   let knownShots = {};
-  let level = 'DIFFICULT';
+  let level = 'EASY';
 
   /* Player socket listenrs and logic calls */
-  socket.on('player', (socketId, cb) => {
+  socket.on('player', (socketId, lev, cb) => {
     //check socketID = socket.id
     playerList[socket.id] = {
       player_id: socket.id,
@@ -42,6 +42,8 @@ const socket = io.on('connect', socket => {
       ships: null,
       turn: null
     };
+    level = lev;
+
     gameState = initGameBoards(socket.id);
 
     ({ randomShots, knownShots, ...rest } = getShotsArray(gameState));
@@ -59,8 +61,6 @@ const socket = io.on('connect', socket => {
       serverId: socket.id,
       clientId: socketId,
       gameState,
-      randomShots,
-      knownShots,
       rest
     });
   });
