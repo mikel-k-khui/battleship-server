@@ -81,7 +81,6 @@ const getAShot = function(
   const chance = Math.random() + Number(weighShot(gameState, level));
 
   // Give a known shots if a) random chance > 60%, b) weigh shots with differentials, c) no more random shots
-  console.log(chance);
 
   return randomShots.length === 0 || (knownShots.length > 0 && chance > 0.7)
     ? knownShots.pop()

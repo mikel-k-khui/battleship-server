@@ -49,7 +49,7 @@ const socket = io.on('connect', socket => {
     ({ randomShots, knownShots, ...rest } = getShotsArray(gameState));
     console.log(
       "Confirmed player from client with game as ",
-      gameState
+      gameState.ships.own
     );
 
     //send gameState with players' board, players' boats,
@@ -100,6 +100,10 @@ const socket = io.on('connect', socket => {
   });
 
   socket.on('disconnect', feed => {
+    gameState = {};
+    randomShots = {};
+    knownShots = {};
+    level = 'EASY';
     console.log('Disconnected:', feed, " @", new Date().toISOString());
   });
 
