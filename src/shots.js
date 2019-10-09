@@ -101,13 +101,13 @@ const weighShot = function(gameState, level) {
   for (const ship of gameState.ships.opponent) {
     opponentSunk += Number(ship.hit) + Number(ship.sunk);
   }
-  console.log(
-    'In weighShot',
-    ownSunk,
-    differentials[level],
-    ' vs opp',
-    opponentSunk
-  );
+  // console.log(
+  //   'In weighShot',
+  //   ownSunk,
+  //   differentials[level],
+  //   ' vs opp',
+  //   opponentSunk
+  // );
   return Number(ownSunk) + differentials[level] <= opponentSunk ? 1 : 0;
 };
 

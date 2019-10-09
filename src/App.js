@@ -47,14 +47,10 @@ const socket = io.on('connect', socket => {
     gameState = initGameBoards(socket.id);
 
     ({ randomShots, knownShots, ...rest } = getShotsArray(gameState));
-    // console.log(
-    //   "Confirmed player from client in server's id:",
-    //   socket.id,
-    //   ' with game as ',
-    //   gameState,
-    //   ' and shots:',
-    //   randomShots
-    // );
+    console.log(
+      "Confirmed player from client with game as ",
+      gameState
+    );
 
     //send gameState with players' board, players' boats,
     cb({
