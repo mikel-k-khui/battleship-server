@@ -1,5 +1,5 @@
 # battleship-server
-[*—You sank my pirate ship.*](https://www.youtube.com/watch?v=GkwMDkfrZ1M)
+[*—You sank my pirate ship.*](https://www.youtube.com/watch?v=GkwMDkfrZ1M) (@ 0:22)
 
 ## Final Product
 
